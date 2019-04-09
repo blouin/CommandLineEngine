@@ -51,13 +51,23 @@ namespace CommandLineEngine
                 types;
 
             // Extract all commands
-            configuration.Commands = types
+            var commandsParsed = types
                 .SelectMany(t =>
                     t.GetTypeInfo().GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static)
-                        .Select(i => new { MethodInfo = i, Attr = i.GetCustomAttribute<CommandAttribute>() })
+                        .Select(i => new
+                            {
+                                MethodInfo = i,
+                                Attr = i.GetCustomAttribute<CommandAttribute>(),
+                                Default = i.GetCustomAttribute<CommandDefaultAttribute>()
+                            })
                         .Where(i => i.Attr != null)
+                        .Select(i => new { C = new Parser.Command(configuration, i.MethodInfo, i.Attr), D = i.Default })
                 )
-                .Select(i => new Parser.Command(configuration, i.MethodInfo, i.Attr))
+                .ToArray();
+
+            // Save commands
+            configuration.Commands = commandsParsed
+                .Select(i => i.C)
                 .ToArray();
 
             // For each command, extract parameters
@@ -65,22 +75,25 @@ namespace CommandLineEngine
             {
                 cmd.Parameters = cmd.MethodInfo.GetParameters()
                     .Select(i => new
-                    {
-                        ParameterInfo = i,
-                        Attr = i.GetCustomAttribute<ParameterAttribute>(),
-                        Hidden = i.GetCustomAttribute<ParameterHiddenAttribute>(),
-                        Rules = i.GetCustomAttributes<ParameterRuleAttribute>()
-                    })
+                        {
+                            ParameterInfo = i,
+                            Attr = i.GetCustomAttribute<ParameterAttribute>(),
+                            Hidden = i.GetCustomAttribute<ParameterHiddenAttribute>(),
+                            Rules = i.GetCustomAttributes<ParameterRuleAttribute>()
+                        })
                     .Select(i => new Parser.CommandParameter(cmd, i.ParameterInfo, i.Rules, i.Attr, i.Hidden))
                     .ToArray();
             }
 
             // Validate the configuration
-            var vr = configuration.Validate();
+            var vr = configuration.Validate(commandsParsed.Count(c => c.D != null));
             if (!vr.Valid)
             {
                 throw new CommandLineEngineDevelopperException(vr);
             }
+
+            // Get default command
+            configuration.DefaultCommand = commandsParsed.FirstOrDefault(i => i.D != null)?.C;
 
             return configuration;
         }

@@ -120,6 +120,9 @@
   <data name="CommandCanNotHaveSpace" xml:space="preserve">
     <value>Command with spaces in the names are not allowed. Command '{0}'.</value>
   </data>
+  <data name="CommandDefaultMostOne" xml:space="preserve">
+    <value>There can be at most one default command.</value>
+  </data>
   <data name="CommandDuplicate" xml:space="preserve">
     <value>Duplicate command named '{0}' found. Ensure that all methods with the [Command] attribute have unique names.</value>
   </data>
