@@ -251,7 +251,7 @@ namespace CommandLineEngine {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Usage: {0} [commandName] [arguments (name=value)].
+        ///   Looks up a localized string similar to Usage: {0} [commandName] [arguments].
         /// </summary>
         internal static string Help_Usage {
             get {

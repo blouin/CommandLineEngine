@@ -181,7 +181,7 @@
     <value>Parameters:</value>
   </data>
   <data name="Help_Usage" xml:space="preserve">
-    <value>Usage: {0} [commandName] [arguments (name=value)]</value>
+    <value>Usage: {0} [commandName] [arguments]</value>
   </data>
   <data name="Invalid" xml:space="preserve">
     <value>Invalid</value>
