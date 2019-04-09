@@ -47,13 +47,21 @@ namespace CommandLineEngine
 
             // Ensure we got types, otherwise, extract from entry assembly
             types = types == null || types.Count() == 0 ?
+#if NET35
+                Assembly.GetEntryAssembly().GetTypes().ToArray() :
+#else
                 Assembly.GetEntryAssembly().DefinedTypes.Select(i => i.AsType()).ToArray() :
+#endif
                 types;
 
             // Extract all commands
             var commandsParsed = types
                 .SelectMany(t =>
-                    t.GetTypeInfo().GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static)
+                    t
+#if !NET35
+                        .GetTypeInfo()
+#endif
+                        .GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static)
                         .Select(i => new
                             {
                                 MethodInfo = i,
@@ -132,7 +140,7 @@ namespace CommandLineEngine
             PrintHelpInternal(configuration, null, helpFormatter, new Operation.Items(new Operation.OperationResult()), false);
         }
 
-        #region Internal Functions
+#region Internal Functions
 
         internal static void PrintHelpInternal(Parser.Configuration configuration, Parser.Command command, IHelpFormatter helpFormatter, Operation.Items operationMessages, bool error = true)
         {

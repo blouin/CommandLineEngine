@@ -40,7 +40,13 @@ namespace CommandLineEngine {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("CommandLineEngine.Resources", typeof(Resources).GetTypeInfo().Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("CommandLineEngine.Resources",
+#if NET35
+                        typeof(Resources).Assembly
+#else
+                        typeof(Resources).GetTypeInfo().Assembly
+#endif
+                        );
                     resourceMan = temp;
                 }
                 return resourceMan;
