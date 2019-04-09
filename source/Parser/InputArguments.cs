@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using CommandLineEngine.Operation;
+using CommandLineEngine.Operation.Types;
 
 namespace CommandLineEngine.Parser
 {
@@ -21,28 +23,29 @@ namespace CommandLineEngine.Parser
         /// </summary>
         /// <param name="command">Command we are running</param>
         /// <param name="args">Arguments in raw form, as recieved</param>
-        internal InputArguments(Command command, string[] args)
+        /// <param name="operationResult">Operation result to write in</param>
+        internal InputArguments(Command command, string[] args, OperationResult operationResult)
         {
-            // Ensure args are valid
-            args = CommandExecutor.GetSafeArgs(args);
-
             // Save values
             this.Command = command;
-            this.ArgsRaw = args;
+            this.ArgsRaw = CommandExecutor.GetSafeArgs(args);
 
             // Perform a mapping from short name to long name
             this.NameMap = Command.Parameters
                 .Where(i => !String.IsNullOrEmpty(i.ShortName))
                 .ToDictionary(i => i.ShortName.ToLower(), i => i.Name.ToLower());
 
+            // Default mapping for parameters
+            this.ArgsParsed = Command.Parameters
+                .ToDictionary(i => i.GetFullLongName(), i => i.HasDefaultValue ? i.DefaultValue?.ToString() : null);
+
             // Perform parsing
-            this.ArgsParsed = new Dictionary<string, string>();
-            for (int i = 0; i < args.Length; i++)
+            for (int i = 0; i < ArgsRaw.Length; i++)
             {
-                if (Command.Configuration.IsArgument(args[i]))
+                if (Command.Configuration.IsArgument(ArgsRaw[i]))
                 {
-                    var possibleArgument = Command.GetArgument(args[i]);
-                    var nextArgument = i + 1 < args.Length ? args[i + 1] : null;
+                    var possibleArgument = Command.GetArgument(ArgsRaw[i]);
+                    var nextArgument = i + 1 < ArgsRaw.Length ? ArgsRaw[i + 1] : null;
 
                     //Ensure next argument is not another parameter
                     if (nextArgument != null && Command.Configuration.IsArgument(nextArgument))
@@ -51,7 +54,7 @@ namespace CommandLineEngine.Parser
                     }
 
                     // Add to dictionary
-                    AddArgument(possibleArgument, args[i], nextArgument);
+                    AddArgument(possibleArgument, ArgsRaw[i], nextArgument);
 
                     // Skip one argument
                     if (nextArgument != null)
@@ -59,9 +62,26 @@ namespace CommandLineEngine.Parser
                         i++;
                     }
                 }
+                else
+                {
+                    if (i > 0 || String.Compare(args[i], Command.Name, true) != 0)
+                    { 
+                        operationResult.Messages.Add(new Warning(String.Format(Resources.UnknownArgument, args[i])));
+                    }
+                }
             }
         }
 
+        #endregion
+
+        #region Private Methods
+
+        /// <summary>
+        /// Adds or updates the argument value
+        /// </summary>
+        /// <param name="possibleArgument">Possible command parameter</param>
+        /// <param name="key">Key in dictionary to add or update</param>
+        /// <param name="value">Value to put in dictionary</param>
         private void AddArgument(CommandParameter possibleArgument, string key, string value)
         {
             // Adjust key
@@ -73,8 +93,8 @@ namespace CommandLineEngine.Parser
                 value = bool.TrueString;
             }
 
-            // Add item
-            ArgsParsed.Add(key.ToLower(), value);
+            // Add or update
+            ArgsParsed[key.ToLower()] = value;
         }
 
         #endregion
@@ -137,12 +157,6 @@ namespace CommandLineEngine.Parser
                 {
                     value = ArgsParsed.ContainsKey(shortName) ? ArgsParsed[shortName] : null;
                 }
-            }
-
-            // Check for default value
-            if (value == null)
-            {
-                value = parameter.DefaultValue?.ToString();
             }
 
             return value;

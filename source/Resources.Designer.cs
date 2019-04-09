@@ -314,6 +314,15 @@ namespace CommandLineEngine {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Unknown argument &apos;{0}&apos;..
+        /// </summary>
+        internal static string UnknownArgument {
+            get {
+                return ResourceManager.GetString("UnknownArgument", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Unknown command name..
         /// </summary>
         internal static string UnknownCommand {
