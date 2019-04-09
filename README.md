@@ -61,8 +61,8 @@ HelpUrl | Allows you to specify a URL for more information, will be shown in hel
 ### Parameter Attribute
 Property | Use
 ------------ | -------------
-Name | Allows you to override the name of the parameter, by default, uses the parameter name. Passed as `#--name:value`.
-ShortName | Allows you to specify a a short name for the parameter. Passed as `-shortName:value`.
+Name | Allows you to override the name of the parameter, by default, uses the parameter name. Passed as `--name value`.
+ShortName | Allows you to specify a a short name for the parameter. Passed as `-shortName value`.
 Description | Allows you to specify a description for the parameter, will be shown in help.
 
 
