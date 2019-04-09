@@ -31,6 +31,7 @@ namespace TestWinForm
                     // Program information
                     c.Program.Name = "Sample application";
                     c.Program.HelpUrl = "https://github.com/blouin/CommandRunner";
+                    c.ExitOnError = false;
                 });
         }
 

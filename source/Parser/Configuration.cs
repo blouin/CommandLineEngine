@@ -136,6 +136,11 @@ namespace CommandLineEngine.Parser
         public string ShortParameterPrefix { get; set; } = "-";
 
         /// <summary>
+        /// Gets if we exit the program on error
+        /// </summary>
+        public bool ExitOnError { get; set; } = true;
+
+        /// <summary>
         /// Gets or sets the keywords reserved for help command
         /// </summary>
         public string[] HelpCommandNames { get; set; } = new[] { "--help", "-h", "?" };

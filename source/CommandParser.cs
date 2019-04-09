@@ -137,13 +137,12 @@ namespace CommandLineEngine
         internal static void PrintHelpInternal(Parser.Configuration configuration, Parser.Command command, IHelpFormatter helpFormatter, Operation.Items operationMessages, bool error = true)
         {
             var f = (helpFormatter ?? new Formatters.Console());
-            var fo = (f as IHelpFormatterWithOption)?.ExitWithError;
 
             // Print help using the help formatter, or create a default console messenger for this
             f.PrintHelp(configuration, command, operationMessages);
             PrintDebug(operationMessages);
 
-            if (error && (!fo.HasValue || fo.Value))
+            if (error && configuration.ExitOnError)
             {
                 Environment.Exit(Int32.MinValue);
             }
