@@ -6,6 +6,20 @@
     <RootNamespace>CommandLineEngine</RootNamespace>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageId>CommandLineEngine</PackageId>
+    <Version>1.0.0-rc</Version>
+    <Authors>JF Blouin</Authors>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/blouin/CommandLineEngine</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/blouin/CommandLineEngine</RepositoryUrl>
+    <PackageTags>commandline command-line command cli engine</PackageTags>
+    <PackageSummary>Convention based argument parser engine and command execution using command-line arguments.</PackageSummary>
+    <Description>This library uses conventions in your code in order to allow command-line functionnality (parsing and executing commands), such as creating a CLI tooling. The library will find the command and execute it passing in the parameters recieved. Otherwise, it will print help information.</Description>
+    <RepositoryType>Git</RepositoryType>
+  </PropertyGroup>
+  
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DefineConstants>DEBUG</DefineConstants>
   </PropertyGroup>
