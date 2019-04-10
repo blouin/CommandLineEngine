@@ -1,21 +1,32 @@
 ﻿using System;
 using System.Linq;
+using System.Text;
 using CommandLineEngine.Parser;
 
 namespace CommandLineEngine.Formatters
 {
     /// <summary>
-    /// Formatter used to output to console
+    /// Formatter used to output to a string builder
     /// </summary>
-    public class Console : ConsoleBase
+    public class Text : FormatterBase
     {
         #region Class Construction
 
         /// <summary>
-        /// Formatter used to output to console
+        /// Formatter used to output to a string builder
         /// </summary>
-        public Console()
+        public Text()
+            : this(null)
         {
+        }
+
+        /// <summary>
+        /// Formatter used to output to a string builder
+        /// </summary>
+        /// <param name="stringBuilder">Current string builder, or null to create one</param>
+        public Text(StringBuilder stringBuilder)
+        {
+            this.StringBuilder = stringBuilder ?? new StringBuilder();
         }
 
         #endregion
@@ -30,14 +41,14 @@ namespace CommandLineEngine.Formatters
         {
             // Write program name
             var executableName = System.IO.Path.GetFileName(Environment.GetCommandLineArgs()[0]);
-            WriteLine(String.Format(Resources.Help_Usage, executableName));
+            StringBuilder.AppendLine(String.Format(Resources.Help_Usage, executableName));
 
             // Write commands
-            WriteLine();
-            WriteLine(Resources.Help_AvailableCommands);
+            StringBuilder.AppendLine();
+            StringBuilder.AppendLine(Resources.Help_AvailableCommands);
             configuration.Commands.OrderBy(i => i.Name).ForEach(c =>
                 {
-                    WriteLine(32, GenerateCommandString(configuration, c));
+                    StringBuilder.AppendLine(GenerateCommandString(configuration, c));
                 });
         }
 
@@ -52,31 +63,31 @@ namespace CommandLineEngine.Formatters
             var options = command.Parameters.Where(i => i.Visible && i.HasDefaultValue).OrderBy(i => i.Name);
 
             // Display command
-            WriteLine(String.Format(Resources.Help_ForCommand, command.Name));
+            StringBuilder.AppendLine(String.Format(Resources.Help_ForCommand, command.Name));
             if (!String.IsNullOrEmpty(command.HelpUrl))
             {
-                WriteLine(command.HelpUrl);
+                StringBuilder.AppendLine(command.HelpUrl);
             }
 
             // Parameters
             if (parameters.Any())
             {
-                WriteLine();
-                WriteLine(Resources.Help_Parameters);
+                StringBuilder.AppendLine();
+                StringBuilder.AppendLine(Resources.Help_Parameters);
                 parameters.ForEach(p =>
                     {
-                        WriteLine(22, GenerateParameterString(configuration, p));
+                        StringBuilder.AppendLine(GenerateParameterString(configuration, p));
                     });
             }
 
             // Options
             if (options.Any())
             {
-                WriteLine();
-                WriteLine(Resources.Help_Options);
+                StringBuilder.AppendLine();
+                StringBuilder.AppendLine(Resources.Help_Options);
                 options.ForEach(p =>
                     {
-                        WriteLine(22, GenerateParameterString(configuration, p));
+                        StringBuilder.AppendLine(GenerateParameterString(configuration, p));
                     });
             }
         }
@@ -99,24 +110,24 @@ namespace CommandLineEngine.Formatters
             {
                 foreach (var e in errors)
                 {
-                    WriteLine(e.Message, System.ConsoleColor.Red);
+                    StringBuilder.AppendLine(e.Message);
                 }
-                WriteLine();
+                StringBuilder.AppendLine();
             }
 
             // Write program name
             if (!String.IsNullOrEmpty(configuration.Program.Name))
             {
-                WriteLine($"{configuration.Program.Name} ({System.Reflection.Assembly.GetEntryAssembly().GetName().Version})");
+                StringBuilder.AppendLine($"{configuration.Program.Name} ({System.Reflection.Assembly.GetEntryAssembly().GetName().Version})");
                 if (!String.IsNullOrEmpty(configuration.Program.Description))
                 {
-                    WriteLine(configuration.Program.Description);
+                    StringBuilder.AppendLine(configuration.Program.Description);
                 }
                 if (!String.IsNullOrEmpty(configuration.Program.HelpUrl))
                 {
-                    WriteLine(configuration.Program.HelpUrl);
+                    StringBuilder.AppendLine(configuration.Program.HelpUrl);
                 }
-                WriteLine();
+                StringBuilder.AppendLine();
             }
 
             // Single command, or multiple command
@@ -130,6 +141,15 @@ namespace CommandLineEngine.Formatters
             }
 
         }
+
+        #endregion
+
+        #region Public Properties
+
+        /// <summary>
+        /// Gets the output string builder
+        /// </summary>
+        public StringBuilder StringBuilder { get; private set; }
 
         #endregion
     }

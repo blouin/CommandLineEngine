@@ -25,8 +25,9 @@ namespace CommandLineEngine.Parser
         /// <summary>
         /// Validates the configuration after parsing
         /// </summary>
+        /// <param name="countDefaultCommands">Count of default commands found</param>
         /// <returns>Operation result</returns>
-        internal Operation.OperationResult Validate()
+        internal Operation.OperationResult Validate(int countDefaultCommands)
         {
             var operationResult = new Operation.OperationResult();
 
@@ -38,6 +39,12 @@ namespace CommandLineEngine.Parser
             if (!Commands.Any())
             {
                 operationResult.Messages.Add(Resources.NoCommandFound);
+            }
+
+            // Ensure there is at most one default command
+            if (countDefaultCommands > 1)
+            {
+                operationResult.Messages.Add(Resources.CommandDefaultMostOne);
             }
 
             // Ensure no command has a space in it
@@ -71,19 +78,12 @@ namespace CommandLineEngine.Parser
         /// <returns>Command requested from user</returns
         internal Command GetCommand(string[] args)
         {
-            if (args.Length == 0)
+            if (args.Length > 0 && !IsArgument(args[0]))
             {
-                return null;
+                return Commands.FirstOrDefault(i => String.Compare(i.Name, args[0], true) == 0);
             }
 
-            // Command name is first args value (by convention)
-            var arg = args[0];
-            if (IsArgument(arg))
-            {
-                return null;
-            }
-
-            return Commands.FirstOrDefault(i => String.Compare(i.Name, arg, true) == 0);
+            return DefaultCommand;
         }
 
         /// <summary>
@@ -136,6 +136,11 @@ namespace CommandLineEngine.Parser
         public string ShortParameterPrefix { get; set; } = "-";
 
         /// <summary>
+        /// Gets if we exit the program on error
+        /// </summary>
+        public bool ExitOnError { get; set; } = true;
+
+        /// <summary>
         /// Gets or sets the keywords reserved for help command
         /// </summary>
         public string[] HelpCommandNames { get; set; } = new[] { "--help", "-h", "?" };
@@ -144,6 +149,11 @@ namespace CommandLineEngine.Parser
         /// Gets the list of commands
         /// </summary>
         public IEnumerable<Command> Commands { get; internal set; }
+
+        /// <summary>
+        /// Gets the default command
+        /// </summary>
+        public Command DefaultCommand { get; internal set; }
 
         /// <summary>
         /// Gets or sets a user configurable action

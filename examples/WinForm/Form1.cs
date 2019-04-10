@@ -11,40 +11,34 @@ using CommandLineEngine.Parser;
 
 namespace TestWinForm
 {
-    public partial class Form1 : Form, CommandLineEngine.IHelpFormatterWithOption
+    public partial class Form1 : Form
     {
         public Form1()
         {
             InitializeComponent();
 
+            // Get text formatter
+            var f = new CommandLineEngine.Formatters.Text(null);
+
+            // Print help
+            CommandLineEngine.CommandParser.PrintHelp(helpFormatter: f);
+            textBox1.Text = f.StringBuilder.ToString();
+
             // Passing NULL to args, so we get from Environment
-            var o = CommandLineEngine.CommandExecutor.Execute(null, helpFormatter: this, configurationBuilder: c => { 
-                // Program information
-                c.Program.Name = "Sample application";
-                c.Program.HelpUrl = "https://github.com/blouin/CommandRunner";
-            });
-
-            if (String.IsNullOrEmpty(textBox1.Text))
-            {
-                CommandLineEngine.CommandParser.PrintHelp(helpFormatter: this);
-            }
-        }
-
-        public bool ExitWithError => false;
-
-        public void PrintHelp(Configuration configuration, Command command, Items operationMessages)
-        {
-            StringBuilder sb = new StringBuilder();
-            operationMessages.ForEach(i => sb.AppendLine(i.Message));
-            sb.AppendLine();
-            sb.AppendLine("Help should go here... but this is only a test.");
-            textBox1.Text = sb.ToString();
+            var o = CommandLineEngine.CommandExecutor.Execute(null, 
+                helpFormatter: f, 
+                configurationBuilder: c => { 
+                    // Program information
+                    c.Program.Name = "Sample application";
+                    c.Program.HelpUrl = "https://github.com/blouin/CommandLineEngine";
+                    c.ExitOnError = false;
+                });
         }
 
         [CommandLineEngine.Attributes.Command()]
         static int SingleCommand(
             [CommandLineEngine.Attributes.Parameter("arg1", "a1", "Help for argument 1")]
-            string arg1 = "DefaultArg1Value",
+            string arg1 = "DefaultArg2Value",
             [CommandLineEngine.Attributes.Parameter("arg2", "a2", "Help for argument 2")]
             string arg2 = "DefaultArg2Value"
         )

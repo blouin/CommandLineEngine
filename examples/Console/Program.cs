@@ -12,7 +12,7 @@ namespace TestConsole
             {
                 // Program information
                 c.Program.Name = "Sample application";
-                c.Program.HelpUrl = "https://github.com/blouin/CommandRunner";
+                c.Program.HelpUrl = "https://github.com/blouin/CommandLineEngine";
 
                 // The defaults
                 //c.LongParameterPrefix = "--";
