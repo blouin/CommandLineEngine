@@ -32,11 +32,7 @@ namespace CommandLineEngine.Parser
             this.Description = parameterAttribute?.Description;
             this.Visible = parameterHiddenAttribute == null && ParameterInfo.ParameterType != typeof(InputArguments);
             this.DefaultValue = parameterInfo.DefaultValue;
-#if NET35
-            this.HasDefaultValue = parameterInfo.HasDefaultValue() || ParameterInfo.ParameterType == typeof(InputArguments);
-#else
             this.HasDefaultValue = parameterInfo.HasDefaultValue || ParameterInfo.ParameterType == typeof(InputArguments);
-#endif
 
         }
 
