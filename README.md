@@ -1,5 +1,5 @@
 # CommandLineEngine
-![AppVeyor](https://img.shields.io/appveyor/ci/blouin/commandlineengine.svg)
+![AppVeyor build](https://img.shields.io/appveyor/ci/blouin/commandlineengine.svg)
 ![AppVeyor tests](https://img.shields.io/appveyor/tests/blouin/commandlineengine.svg)
 
 This library uses conventions in your code in order to allow command-line functionnality (parsing and executing commands), such as creating a CLI. When the code is executed by the user, the first argument is the command name, followed by the arguments. The library will find the command and execute it passing in the parameters recieved. Otherwise, it will print help information.
