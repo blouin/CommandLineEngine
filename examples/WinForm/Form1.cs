@@ -30,7 +30,7 @@ namespace TestWinForm
                 configurationBuilder: c => { 
                     // Program information
                     c.Program.Name = "Sample application";
-                    c.Program.HelpUrl = "https://github.com/blouin/CommandRunner";
+                    c.Program.HelpUrl = "https://github.com/blouin/CommandLineEngine";
                     c.ExitOnError = false;
                 });
         }
