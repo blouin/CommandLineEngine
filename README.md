@@ -3,7 +3,7 @@
 
 This library uses conventions in your code in order to allow command-line functionnality (parsing and executing commands), such as creating a CLI. When the code is executed by the user, the first argument is the command name, followed by the arguments. The library will find the command and execute it passing in the parameters recieved. Otherwise, it will print help information.
 
-To use the library in your application, install the NuGet package.
+To use the library in your application, install the [NuGet package](https://www.nuget.org/packages/CommandLineEngine/).
 
 Features:
 * Minimal attributes required for basic functionnality
