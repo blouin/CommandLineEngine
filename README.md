@@ -41,7 +41,7 @@ class Program
 ```
 Assuming the code compiles to MyApp.exe, we can simply call
 ```
-MyApp.exe SayHello --name:UserName
+MyApp.exe SayHello --name UserName
 Output: Hello UserName!
 ```
 
