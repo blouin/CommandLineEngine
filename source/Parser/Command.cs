@@ -84,7 +84,7 @@ namespace CommandLineEngine.Parser
                 {
                     // Check that the value was recieved
                     var v = parsedArguments.GetValue(p);
-                    if (v == null && (!p.HasDefaultValue && p.DefaultValue == null))
+                    if (v == null && !(p.HasDefaultValue && p.DefaultValue == null))
                     {
                         operationResult.Messages.Add(String.Format(Resources.ParameterMissing, p.Name));
                     }
