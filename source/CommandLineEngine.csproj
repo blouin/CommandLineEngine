@@ -9,7 +9,7 @@
   <PropertyGroup>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageId>CommandLineEngine</PackageId>
-    <Version>1.0.0.1-rc</Version>
+    <Version>1.0.0</Version>
     <Authors>JF Blouin</Authors>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/blouin/CommandLineEngine</PackageProjectUrl>
