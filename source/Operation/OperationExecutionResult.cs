@@ -4,17 +4,15 @@ namespace CommandLineEngine.Operation
     /// <summary>
     /// Represents the operation results
     /// </summary>
-    public class OperationResult
+    public class OperationExecutionResult : OperationResult
     {
         #region Class Construction
 
         /// <summary>
         /// Creates the operation results
         /// </summary>
-        public OperationResult()
+        public OperationExecutionResult()
         {
-            this.Valid = true;
-            this.Messages = new Items(this);
         }
 
         #endregion
@@ -27,7 +25,7 @@ namespace CommandLineEngine.Operation
         /// <returns>returns the list of messages</returns>
         public override string ToString()
         {
-            return Valid ? Resources.Valid : Resources.Invalid;
+            return Valid ? (Output?.ToString() ?? Resources.Valid) : Resources.Invalid;
         }
 
 
@@ -36,14 +34,9 @@ namespace CommandLineEngine.Operation
         #region Public Properties
 
         /// <summary>
-        /// Gets or sets if the operation is valid
+        /// Gets the output from execution
         /// </summary>
-        public bool Valid { get; set; }
-
-        /// <summary>
-        /// Gets the operation messages
-        /// </summary>
-        public Items Messages { get; private set; }
+        public object Output { get; internal set; }
 
         #endregion
     }

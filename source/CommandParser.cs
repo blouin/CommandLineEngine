@@ -75,16 +75,21 @@ namespace CommandLineEngine
             // For each command, extract parameters
             foreach (var cmd in configuration.Commands)
             {
-                cmd.Parameters = cmd.MethodInfo.GetParameters()
+                var cmdParameters = cmd.MethodInfo.GetParameters()
                     .Select(i => new
                         {
                             ParameterInfo = i,
+                            ParameterPosition = 0,
                             Attr = i.GetCustomAttribute<ParameterAttribute>(),
                             Hidden = i.GetCustomAttribute<ParameterHiddenAttribute>(),
-                            Rules = i.GetCustomAttributes<ParameterRuleAttribute>()
+                            Rules = i.GetCustomAttributes<ParameterRuleAttribute>(),
+                            System =
+                                typeof(Parser.InputArguments).GetTypeInfo().IsAssignableFrom(i.ParameterType) ||
+                                typeof(Operation.OperationResult).GetTypeInfo().IsAssignableFrom(i.ParameterType)
                         })
-                    .Select(i => new Parser.CommandParameter(cmd, i.ParameterInfo, i.Rules, i.Attr, i.Hidden))
-                    .ToArray();
+                    .Select(i => new { S = i.System, P = new Parser.CommandParameter(cmd, i.ParameterInfo, i.Rules, i.Attr, i.Hidden) });
+                cmd.Parameters = cmdParameters.Where(i => !i.S).Select(i => i.P).ToArray();
+                cmd.SystemParameters = cmdParameters.Where(i => i.S).Select(i => i.P).ToArray();
             }
 
             // Validate the configuration
@@ -134,7 +139,7 @@ namespace CommandLineEngine
             PrintHelpInternal(configuration, null, helpFormatter, new Operation.Items(new Operation.OperationResult()), false);
         }
 
-#region Internal Functions
+        #region Internal Functions
 
         internal static void PrintHelpInternal(Parser.Configuration configuration, Parser.Command command, IHelpFormatter helpFormatter, Operation.Items operationMessages, bool error = true)
         {

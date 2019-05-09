@@ -201,6 +201,9 @@
   <data name="ParameterReservedKeywords" xml:space="preserve">
     <value>Parameter with reserved keyword found for command '{1}'. Reserved kewords are '{0}'.</value>
   </data>
+  <data name="ParametersNotParsable" xml:space="preserve">
+    <value>Parameters can not be parsed.</value>
+  </data>
   <data name="ParameterVisible" xml:space="preserve">
     <value>Hidden parameter named '{0}' found for command '{1}' does not have a default value specified. Ensure that all parameters with the [Hidden] attribute have default values.</value>
   </data>

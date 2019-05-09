@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text;
 using CommandLineEngine.Operation.Types;
 
@@ -20,7 +21,7 @@ namespace TestConsole
                 //c.HelpCommandNames = new[] { "--help", "-h", "?" };
 
                 // Custom validation
-                c.ConfigurationValidationAction = (o) => 
+                c.ConfigurationValidationAction = (_, o) => 
                     {
                         o.Messages.Add(new Information("FYI: custom validation of Configuration..."));
                         return true;

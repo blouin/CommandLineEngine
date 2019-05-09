@@ -19,7 +19,7 @@ namespace CommandLineEngine
         /// <param name="helpFormatter">Help formatting engine, or nothing to format the messages to console</param>
         /// <param name="configurationBuilder">Configuration builder action, or nothing to use defaults</param>
         /// <returns>Results from the operation</returns>
-        public static Operation.OperationResult Execute(string[] args, IHelpFormatter helpFormatter = null, Action<Parser.Configuration> configurationBuilder = null)
+        public static Operation.OperationExecutionResult Execute(string[] args, IHelpFormatter helpFormatter = null, Action<Parser.Configuration> configurationBuilder = null)
         {
             return Execute(args, new Type[] { }, helpFormatter, configurationBuilder);
         }
@@ -32,7 +32,7 @@ namespace CommandLineEngine
         /// <param name="helpFormatter">Help formatting engine, or nothing to format the messages to console</param>
         /// <param name="configurationBuilder">Configuration builder action, or nothing to use defaults</param>
         /// <returns>Results from the operation</returns>
-        public static Operation.OperationResult Execute(string[] args, Type type, IHelpFormatter helpFormatter = null, Action<Parser.Configuration> configurationBuilder = null)
+        public static Operation.OperationExecutionResult Execute(string[] args, Type type, IHelpFormatter helpFormatter = null, Action<Parser.Configuration> configurationBuilder = null)
         {
             return Execute(args, new[] { type }, helpFormatter, configurationBuilder);
         }
@@ -45,7 +45,7 @@ namespace CommandLineEngine
         /// <param name="helpFormatter">Help formatting engine, or nothing to format the messages to console</param>
         /// <param name="configurationBuilder">Configuration builder action, or nothing to use defaults</param>
         /// <returns>Results from the operation</returns>
-        public static Operation.OperationResult Execute(string[] args, Type[] types, IHelpFormatter helpFormatter = null, Action<Parser.Configuration> configurationBuilder = null)
+        public static Operation.OperationExecutionResult Execute(string[] args, Type[] types, IHelpFormatter helpFormatter = null, Action<Parser.Configuration> configurationBuilder = null)
         {
             // Get safe args collection
             args = GetSafeArgs(args);
@@ -54,7 +54,7 @@ namespace CommandLineEngine
             var configuration = CommandParser.Parse(types, configurationBuilder);
 
             // Start logging operation
-            var operationResult = new Operation.OperationResult();
+            var operationResult = new Operation.OperationExecutionResult();
 
             // Get command from arguments
             operationResult.Messages.Add(new Operation.Types.Progress(Resources.GetFromArguments));
@@ -74,7 +74,7 @@ namespace CommandLineEngine
             {
                 command = configuration.Commands.First();
                 operationResult.Messages.Add(new Operation.Types.Information(String.Format(Resources.UnknownCommandSingle, command.Name)));
-                operationResult.Output = command.ExecuteInternal(args, operationResult, helpFormatter);
+                command.ExecuteInternal(args, operationResult, helpFormatter);
                 return operationResult;
             }
 
@@ -82,7 +82,7 @@ namespace CommandLineEngine
             if (command != null)
             {
                 operationResult.Messages.Add(new Operation.Types.Information(String.Format(Resources.ExecutingCommandFromArguments, command.Name)));
-                operationResult.Output = command.ExecuteInternal(args, operationResult, helpFormatter);
+                command.ExecuteInternal(args, operationResult, helpFormatter);
                 return operationResult;
             }
             else

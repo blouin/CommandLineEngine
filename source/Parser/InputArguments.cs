@@ -12,9 +12,12 @@ namespace CommandLineEngine.Parser
     public sealed class InputArguments
     {
         /// <summary>
-        /// Seperator between argument name and value
+        /// Adds or updates the argument value
         /// </summary>
-        //public const char Separator = ':';
+        /// <param name="possibleArgument">Possible command parameter</param>
+        /// <param name="key">Key in dictionary to add or update</param>
+        /// <param name="values">Values to put in dictionary</param>
+        public delegate void AddArgumentDelegate(CommandParameter possibleArgument, string key, string[] values);
 
         #region Class Construction
 
@@ -37,36 +40,52 @@ namespace CommandLineEngine.Parser
 
             // Default mapping for parameters
             this.ArgsParsed = Command.Parameters
-                .ToDictionary(i => i.GetFullLongName(), i => i.HasDefaultValue ? i.DefaultValue?.ToString() : null);
+                .ToDictionary(
+                    i => i.GetFullLongName(), 
+                    i => i.HasDefaultValue ? new[] { i.DefaultValue?.ToString() } : null);
 
-            // Perform parsing
-            for (int i = 0; i < ArgsRaw.Length; i++)
+            // Parse the arguments
+            if (Command.Configuration.ParseArgumentsAction != null)
             {
-                if (Command.Configuration.IsArgument(ArgsRaw[i]))
+                // Custom parsing
+                ParseValid = Command.Configuration.ParseArgumentsAction(Command.Configuration, Command,
+                    ArgsRaw,
+                    (a1, a2, a3) => AddArgumentInternal(a1, a2, a3));
+            }
+            else
+            {
+                // Default parsing
+                ParseValid =true;
+                for (int i = 0; i < ArgsRaw.Length; i++)
                 {
-                    var possibleArgument = Command.GetArgument(ArgsRaw[i]);
-                    var nextArgument = i + 1 < ArgsRaw.Length ? ArgsRaw[i + 1] : null;
-
-                    //Ensure next argument is not another parameter
-                    if (nextArgument != null && Command.Configuration.IsArgument(nextArgument))
+                    if (Command.Configuration.IsArgument(ArgsRaw[i]))
                     {
-                        nextArgument = null;
+                        var possibleArgument = Command.GetParameter(ArgsRaw[i]);
+                        var argumentValues = new List<string>();
+
+                        while (i + 1 < ArgsRaw.Length)
+                        {
+                            var nextArgument = ArgsRaw[i + 1];
+
+                            // Ensure next argument is not another parameter
+                            if (nextArgument != null && Command.Configuration.IsArgument(nextArgument))
+                            {
+                                break;
+                            }
+
+                            argumentValues.Add(nextArgument);
+                            i++;
+                        }
+
+                        // Add to dictionary
+                        AddArgumentInternal(possibleArgument, ArgsRaw[i], argumentValues.ToArray());
                     }
-
-                    // Add to dictionary
-                    AddArgument(possibleArgument, ArgsRaw[i], nextArgument);
-
-                    // Skip one argument
-                    if (nextArgument != null)
+                    else
                     {
-                        i++;
-                    }
-                }
-                else
-                {
-                    if (i > 0 || String.Compare(args[i], Command.Name, true) != 0)
-                    { 
-                        operationResult.Messages.Add(new Warning(String.Format(Resources.UnknownArgument, args[i])));
+                        if (i > 0 || String.Compare(args[i], Command.Name, true) != 0)
+                        {
+                            operationResult.Messages.Add(new Warning(String.Format(Resources.UnknownArgument, args[i])));
+                        }
                     }
                 }
             }
@@ -81,20 +100,20 @@ namespace CommandLineEngine.Parser
         /// </summary>
         /// <param name="possibleArgument">Possible command parameter</param>
         /// <param name="key">Key in dictionary to add or update</param>
-        /// <param name="value">Value to put in dictionary</param>
-        private void AddArgument(CommandParameter possibleArgument, string key, string value)
+        /// <param name="values">Values to put in dictionary</param>
+        private void AddArgumentInternal(CommandParameter possibleArgument, string key, string[] values)
         {
             // Adjust key
             key = possibleArgument?.GetFullLongName() ?? key;
 
             // Special case for boolean, which can have a default value of True
-            if (value == null && possibleArgument?.ParameterInfo.ParameterType == typeof(bool))
+            if (values == null && possibleArgument?.ParameterInfo.ParameterType == typeof(bool))
             {
-                value = bool.TrueString;
+                values = new[] { bool.TrueString };
             }
 
             // Add or update
-            ArgsParsed[key.ToLower()] = value;
+            ArgsParsed[key.ToLower()] = values;
         }
 
         #endregion
@@ -115,14 +134,14 @@ namespace CommandLineEngine.Parser
         /// </summary>
         /// <param name="parameterName">Parameter name whose value to get</param>
         /// <returns>Value of the argument</returns>
-        public string GetValue(string parameterName)
+        public string[] GetValue(string parameterName)
         {
             if (String.IsNullOrEmpty(parameterName))
             {
                 throw new ArgumentException(nameof(parameterName));
             }
 
-            var possibleArgument = Command.GetArgument(parameterName);
+            var possibleArgument = Command.GetParameter(parameterName);
             if (possibleArgument != null)
             { 
                 return GetValue(possibleArgument);
@@ -138,7 +157,7 @@ namespace CommandLineEngine.Parser
         /// </summary>
         /// <param name="parameter">Parameter whose value to get</param>
         /// <returns>Value of the argument</returns>
-        public string GetValue(CommandParameter parameter)
+        public string[] GetValue(CommandParameter parameter)
         {
             if (parameter == null)
             {
@@ -174,12 +193,21 @@ namespace CommandLineEngine.Parser
         /// <summary>
         /// Holds the parsed arguments
         /// </summary>
-        private Dictionary<string, string> ArgsParsed { get; set; }
+        private Dictionary<string, string[]> ArgsParsed { get; set; }
 
         /// <summary>
         /// Holds the mapping from short names to long names
         /// </summary>
         private Dictionary<string, string> NameMap { get; set; }
+
+        #endregion
+
+        #region Internal Properties
+
+        /// <summary>
+        /// Gets if the parsing of arguments is valid
+        /// </summary>
+        internal bool ParseValid { get; private set; }
 
         #endregion
 

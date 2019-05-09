@@ -30,10 +30,9 @@ namespace CommandLineEngine.Parser
             this.Name = !String.IsNullOrEmpty(parameterAttribute?.Name) ? parameterAttribute.Name : parameterInfo.Name;
             this.ShortName = parameterAttribute?.ShortName;
             this.Description = parameterAttribute?.Description;
-            this.Visible = parameterHiddenAttribute == null && ParameterInfo.ParameterType != typeof(InputArguments);
+            this.Visible = parameterHiddenAttribute == null;
             this.DefaultValue = parameterInfo.DefaultValue;
-            this.HasDefaultValue = parameterInfo.HasDefaultValue || ParameterInfo.ParameterType == typeof(InputArguments);
-
+            this.HasDefaultValue = parameterInfo.HasDefaultValue;
         }
 
         #endregion
@@ -68,7 +67,7 @@ namespace CommandLineEngine.Parser
             return String.Compare(name, GetFullLongName(), true) == 0 || String.Compare(name, GetFullShortName(), true) == 0;
         }
 
-#endregion
+        #endregion
 
         #region Public Methods
 
@@ -85,15 +84,15 @@ namespace CommandLineEngine.Parser
 
         #region Internal Properties
 
-                /// <summary>
-                /// Gets a reference to the command
-                /// </summary>
-                internal Command Command { get; private set; }
+        /// <summary>
+        /// Gets a reference to the command
+        /// </summary>
+        internal Command Command { get; private set; }
 
-                /// <summary>
-                /// Gets a reference to the paramter info from reflection
-                /// </summary>
-                internal System.Reflection.ParameterInfo ParameterInfo { get; private set; }
+        /// <summary>
+        /// Gets a reference to the paramter info from reflection
+        /// </summary>
+        internal System.Reflection.ParameterInfo ParameterInfo { get; private set; }
 
         #endregion
 
