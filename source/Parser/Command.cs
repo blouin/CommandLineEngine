@@ -146,7 +146,7 @@ namespace CommandLineEngine.Parser
                 }
 
                 // Get values
-                var allParameters = Parameters.Concat(SystemParameters);
+                var allParameters = SystemParameters.Concat(Parameters).OrderBy(i => i.ParameterInfo.Position);
                 var values = allParameters.Select(i =>
                     {
                         if (typeof(InputArguments).GetTypeInfo().IsAssignableFrom(i.ParameterInfo.ParameterType))
