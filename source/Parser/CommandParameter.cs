@@ -26,13 +26,18 @@ namespace CommandLineEngine.Parser
             this.ParameterInfo = parameterInfo;
             this.Rules = rules;
 
+            // Check for system
+            this.IsSystem =
+                typeof(InputArguments).GetTypeInfo().IsAssignableFrom(ParameterInfo.ParameterType) ||
+                typeof(Operation.OperationResult).GetTypeInfo().IsAssignableFrom(ParameterInfo.ParameterType);
+
             // Set values
             this.Name = !String.IsNullOrEmpty(parameterAttribute?.Name) ? parameterAttribute.Name : parameterInfo.Name;
             this.ShortName = parameterAttribute?.ShortName;
             this.Description = parameterAttribute?.Description;
-            this.Visible = parameterHiddenAttribute == null && ParameterInfo.ParameterType != typeof(InputArguments);
+            this.Visible = parameterHiddenAttribute == null && !IsSystem;
             this.DefaultValue = parameterInfo.DefaultValue;
-            this.HasDefaultValue = parameterInfo.HasDefaultValue || ParameterInfo.ParameterType == typeof(InputArguments);
+            this.HasDefaultValue = parameterInfo.HasDefaultValue || IsSystem;
 
         }
 
@@ -68,7 +73,7 @@ namespace CommandLineEngine.Parser
             return String.Compare(name, GetFullLongName(), true) == 0 || String.Compare(name, GetFullShortName(), true) == 0;
         }
 
-#endregion
+        #endregion
 
         #region Public Methods
 
@@ -85,15 +90,20 @@ namespace CommandLineEngine.Parser
 
         #region Internal Properties
 
-                /// <summary>
-                /// Gets a reference to the command
-                /// </summary>
-                internal Command Command { get; private set; }
+        /// <summary>
+        /// Gets if a system parameter
+        /// </summary>
+        internal bool IsSystem { get; private set; }
 
-                /// <summary>
-                /// Gets a reference to the paramter info from reflection
-                /// </summary>
-                internal System.Reflection.ParameterInfo ParameterInfo { get; private set; }
+        /// <summary>
+        /// Gets a reference to the command
+        /// </summary>
+        internal Command Command { get; private set; }
+
+        /// <summary>
+        /// Gets a reference to the paramter info from reflection
+        /// </summary>
+        internal System.Reflection.ParameterInfo ParameterInfo { get; private set; }
 
         #endregion
 

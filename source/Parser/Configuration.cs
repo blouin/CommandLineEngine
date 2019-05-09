@@ -32,7 +32,7 @@ namespace CommandLineEngine.Parser
             var operationResult = new Operation.OperationResult();
 
             // Run user actions
-            var b = ConfigurationValidationAction?.Invoke(operationResult);
+            var b = ConfigurationValidationAction?.Invoke(this, operationResult);
             operationResult.Valid &= b ?? true;
 
             // Ensure there is at least one command
@@ -158,7 +158,12 @@ namespace CommandLineEngine.Parser
         /// <summary>
         /// Gets or sets a user configurable action
         /// </summary>
-        public Func<Operation.OperationResult, bool> ConfigurationValidationAction { get; set; }
+        public Func<Configuration, Operation.OperationResult, bool> ConfigurationValidationAction { get; set; }
+
+        /// <summary>
+        /// Gets or sets a user parse parameter action
+        /// </summary>
+        public Func<Configuration, Parser.Command, string[], InputArguments.AddArgumentDelegate, bool> ParseArgumentsAction { get; set; }
 
         #endregion
     }

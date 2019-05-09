@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text;
 using CommandLineEngine.Operation.Types;
 
@@ -20,7 +21,7 @@ namespace TestConsole
                 //c.HelpCommandNames = new[] { "--help", "-h", "?" };
 
                 // Custom validation
-                c.ConfigurationValidationAction = (o) => 
+                c.ConfigurationValidationAction = (_, o) => 
                     {
                         o.Messages.Add(new Information("FYI: custom validation of Configuration..."));
                         return true;
@@ -31,6 +32,8 @@ namespace TestConsole
 
         [CommandLineEngine.Attributes.Command()]
         static int SingleCommand(
+            string[] arg0,
+            CommandLineEngine.Operation.OperationResult or,
             [CommandLineEngine.Attributes.Parameter("arg1", "a1", "Help for argument 1")]
             string arg1 = "DefaultArg1Value",
             [CommandLineEngine.Attributes.Parameter("arg2", "a2", "Help for argument 2")]

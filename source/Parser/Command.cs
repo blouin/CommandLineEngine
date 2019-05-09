@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -78,6 +79,11 @@ namespace CommandLineEngine.Parser
             {
                 // Parse the arguments
                 var parsedArguments = new InputArguments(this, args, operationResult);
+                if (!parsedArguments.ParseValid)
+                {
+                    operationResult.Messages.Add(Resources.ParametersNotParsable);
+                    return parsedArguments;
+                }
 
                 // Validate the parameters
                 foreach (var p in Parameters.Where(i => i.ParameterInfo.ParameterType != typeof(InputArguments)))
@@ -143,13 +149,27 @@ namespace CommandLineEngine.Parser
                 // Get values
                 var values = Parameters.Select(i =>
                     {
-                        if (i.ParameterInfo.ParameterType == typeof(InputArguments))
+                        if (typeof(InputArguments).GetTypeInfo().IsAssignableFrom(i.ParameterInfo.ParameterType))
                         {
                             return parsedArguments;
                         }
+                        else if (typeof(OperationResult).GetTypeInfo().IsAssignableFrom(i.ParameterInfo.ParameterType))
+                        {
+                            return operationResult;
+                        }
+                        else if (typeof(Array).GetTypeInfo().IsAssignableFrom(i.ParameterInfo.ParameterType))
+                        {
+                            var finalType = i.ParameterInfo.ParameterType.GetElementType();
+                            var objectArray = parsedArguments.GetValue(i)
+                                .Select(j => Convert.ChangeType(j, finalType))
+                                .ToArray();
+                            var arr = Array.CreateInstance(finalType, objectArray.Length);
+                            Array.Copy(objectArray, arr, objectArray.Length);
+                            return arr;
+                        }
                         else
                         {
-                            return Convert.ChangeType(parsedArguments.GetValue(i), i.ParameterInfo.ParameterType);
+                            return Convert.ChangeType(parsedArguments.GetValue(i)[0], i.ParameterInfo.ParameterType);
                         }
                     })
                     .ToArray();
@@ -166,16 +186,6 @@ namespace CommandLineEngine.Parser
             }
         }
 
-        /// <summary>
-        /// Gets the command parameter by name
-        /// </summary>
-        /// <param name="name">Name to try and match</param>
-        /// <returns>Matching argument</returns>
-        internal CommandParameter GetArgument(string name)
-        {
-            return Parameters.FirstOrDefault(i => i.IsCorrectParameter(name));
-        }
-
         #endregion
 
         #region Public Methods
@@ -187,6 +197,16 @@ namespace CommandLineEngine.Parser
         public override string ToString()
         {
             return Name;
+        }
+
+        /// <summary>
+        /// Gets the command parameter by name
+        /// </summary>
+        /// <param name="name">Name to try and match</param>
+        /// <returns>Matching argument</returns>
+        public CommandParameter GetParameter(string name)
+        {
+            return Parameters.FirstOrDefault(i => i.IsCorrectParameter(name));
         }
 
         /// <summary>
