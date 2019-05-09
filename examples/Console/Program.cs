@@ -32,8 +32,6 @@ namespace TestConsole
 
         [CommandLineEngine.Attributes.Command()]
         static int SingleCommand(
-            string[] arg0,
-            CommandLineEngine.Operation.OperationResult or,
             [CommandLineEngine.Attributes.Parameter("arg1", "a1", "Help for argument 1")]
             string arg1 = "DefaultArg1Value",
             [CommandLineEngine.Attributes.Parameter("arg2", "a2", "Help for argument 2")]
