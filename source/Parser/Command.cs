@@ -86,7 +86,7 @@ namespace CommandLineEngine.Parser
                 }
 
                 // Validate the parameters
-                foreach (var p in Parameters.Where(i => i.ParameterInfo.ParameterType != typeof(InputArguments)))
+                foreach (var p in Parameters)
                 {
                     // Check that the value was recieved
                     var v = parsedArguments.GetValue(p);
@@ -147,7 +147,8 @@ namespace CommandLineEngine.Parser
                 }
 
                 // Get values
-                var values = Parameters.Select(i =>
+                var allParameters = Parameters.Concat(SystemParameters);
+                var values = allParameters.Select(i =>
                     {
                         if (typeof(InputArguments).GetTypeInfo().IsAssignableFrom(i.ParameterInfo.ParameterType))
                         {
@@ -246,6 +247,11 @@ namespace CommandLineEngine.Parser
         /// Gets a reference to the method info from reflection
         /// </summary>
         internal System.Reflection.MethodInfo MethodInfo { get; private set; }
+
+        /// <summary>
+        /// Gets the list of system parameters for the command
+        /// </summary>
+        internal IEnumerable<CommandParameter> SystemParameters { get; set; }
 
         #endregion
 

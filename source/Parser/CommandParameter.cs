@@ -26,19 +26,13 @@ namespace CommandLineEngine.Parser
             this.ParameterInfo = parameterInfo;
             this.Rules = rules;
 
-            // Check for system
-            this.IsSystem =
-                typeof(InputArguments).GetTypeInfo().IsAssignableFrom(ParameterInfo.ParameterType) ||
-                typeof(Operation.OperationResult).GetTypeInfo().IsAssignableFrom(ParameterInfo.ParameterType);
-
             // Set values
             this.Name = !String.IsNullOrEmpty(parameterAttribute?.Name) ? parameterAttribute.Name : parameterInfo.Name;
             this.ShortName = parameterAttribute?.ShortName;
             this.Description = parameterAttribute?.Description;
-            this.Visible = parameterHiddenAttribute == null && !IsSystem;
+            this.Visible = parameterHiddenAttribute == null;
             this.DefaultValue = parameterInfo.DefaultValue;
-            this.HasDefaultValue = parameterInfo.HasDefaultValue || IsSystem;
-
+            this.HasDefaultValue = parameterInfo.HasDefaultValue;
         }
 
         #endregion
@@ -89,11 +83,6 @@ namespace CommandLineEngine.Parser
         #endregion
 
         #region Internal Properties
-
-        /// <summary>
-        /// Gets if a system parameter
-        /// </summary>
-        internal bool IsSystem { get; private set; }
 
         /// <summary>
         /// Gets a reference to the command
