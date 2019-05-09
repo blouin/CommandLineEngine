@@ -123,14 +123,13 @@ namespace CommandLineEngine.Parser
         /// <param name="args">List of arguments</param>
         /// <param name="operationResult">Operation result to write in</param>
         /// <param name="helpFormatter">Formatter object in case we need to write help</param>
-        /// <returns>Return value of the command</returns>
-        internal object ExecuteInternal(string[] args, OperationResult operationResult, IHelpFormatter helpFormatter = null)
+        internal void ExecuteInternal(string[] args, OperationExecutionResult operationResult, IHelpFormatter helpFormatter = null)
         {
             var parsedArguments = ValidateInternal(args, operationResult);
             if (!operationResult.Valid)
             {
                 CommandParser.PrintHelpInternal(Configuration, this, helpFormatter, operationResult.Messages);
-                return null;
+                return;
             }
 
             try
@@ -175,7 +174,7 @@ namespace CommandLineEngine.Parser
                     })
                     .ToArray();
 
-                return MethodInfo.Invoke(target, values);
+                operationResult.Output = MethodInfo.Invoke(target, values);
             }
             catch (Exception e)
             {
@@ -214,6 +213,7 @@ namespace CommandLineEngine.Parser
         /// Validates the command before executing
         /// </summary>
         /// <param name="args">List of arguments</param>
+        /// <returns>Results from validation</returns>
         public OperationResult Validate(string[] args)
         {
             var operationResult = new Operation.OperationResult();
@@ -227,11 +227,12 @@ namespace CommandLineEngine.Parser
         /// <param name="args">List of arguments</param>
         /// <param name="operationResult">Operation result to write in</param>
         /// <param name="helpFormatter">Formatter object in case we need to write help</param>
-        /// <returns>Return value of the command</returns>
-        public object Execute(string[] args, IHelpFormatter helpFormatter = null)
+        /// <returns>Results from execution</returns>
+        public OperationExecutionResult Execute(string[] args, IHelpFormatter helpFormatter = null)
         {
-            var operationResult = new Operation.OperationResult();
-            return ExecuteInternal(args, operationResult);
+            var operationResult = new Operation.OperationExecutionResult();
+            ExecuteInternal(args, operationResult);
+            return operationResult;
         }
 
         #endregion

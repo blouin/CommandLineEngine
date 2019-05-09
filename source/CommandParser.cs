@@ -79,6 +79,7 @@ namespace CommandLineEngine
                     .Select(i => new
                         {
                             ParameterInfo = i,
+                            ParameterPosition = 0,
                             Attr = i.GetCustomAttribute<ParameterAttribute>(),
                             Hidden = i.GetCustomAttribute<ParameterHiddenAttribute>(),
                             Rules = i.GetCustomAttributes<ParameterRuleAttribute>(),
