@@ -1,10 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Linq;
+using Xunit;
+using Xunit.Abstractions;
 
 namespace UnitTests
 {
-    class ExecutionTests
+    public class ExecutionTests
     {
+        [Fact]
+        public void ExecuteSimple()
+        {
+            var o = CommandLineEngine.CommandExecutor.Execute(null, typeof(ValidCommands.Single));
+            Assert.Equal(999, (int)o.Output);
+        }
     }
 }

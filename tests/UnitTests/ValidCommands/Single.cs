@@ -7,6 +7,6 @@ namespace UnitTests.ValidCommands
     class Single
     {
         [CommandLineEngine.Attributes.Command()]
-        static void Command1() { }
+        static int Command1() { return 999; }
     }
 }
