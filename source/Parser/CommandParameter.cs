@@ -71,14 +71,14 @@ namespace CommandLineEngine.Parser
 
         #region Public Methods
 
-                /// <summary>
-                /// Gets a string representation of the command
-                /// </summary>
-                /// <returns>String representation</returns>
-                public override string ToString()
-                {
-                    return Name;
-                }
+        /// <summary>
+        /// Gets a string representation of the command
+        /// </summary>
+        /// <returns>String representation</returns>
+        public override string ToString()
+        {
+            return Name;
+        }
 
         #endregion
 
