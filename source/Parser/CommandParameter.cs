@@ -98,40 +98,40 @@ namespace CommandLineEngine.Parser
 
         #region Public Properties
 
-                /// <summary>
-                /// Gets the parameter name
-                /// </summary>
-                public string Name { get; private set; }
+        /// <summary>
+        /// Gets the parameter name
+        /// </summary>
+        public string Name { get; private set; }
 
-                /// <summary>
-                /// Gets the parameter short name
-                /// </summary>
-                public string ShortName { get; private set; }
+        /// <summary>
+        /// Gets the parameter short name
+        /// </summary>
+        public string ShortName { get; private set; }
 
-                /// <summary>
-                /// Gets the parameter description
-                /// </summary>
-                public string Description { get; private set; }
+        /// <summary>
+        /// Gets the parameter description
+        /// </summary>
+        public string Description { get; private set; }
 
-                /// <summary>
-                /// Gets if the parameter should be visible in help formatters
-                /// </summary>
-                public bool Visible { get; private set; }
+        /// <summary>
+        /// Gets if the parameter should be visible in help formatters
+        /// </summary>
+        public bool Visible { get; private set; }
 
-                /// <summary>
-                /// Gets the default value for the paramter
-                /// </summary>
-                public object DefaultValue { get; private set; }
+        /// <summary>
+        /// Gets the default value for the paramter
+        /// </summary>
+        public object DefaultValue { get; private set; }
 
-                /// <summary>
-                /// Gets if the parameter has a default value
-                /// </summary>
-                public bool HasDefaultValue { get; private set; }
+        /// <summary>
+        /// Gets if the parameter has a default value
+        /// </summary>
+        public bool HasDefaultValue { get; private set; }
 
-                /// <summary>
-                /// Gets a list of paramter rules
-                /// </summary>
-                public IEnumerable<Attributes.ParameterRuleAttribute> Rules { get; private set; }
+        /// <summary>
+        /// Gets a list of paramter rules
+        /// </summary>
+        public IEnumerable<Attributes.ParameterRuleAttribute> Rules { get; private set; }
 
         #endregion
     }
