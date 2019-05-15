@@ -4,7 +4,7 @@ using System.Text;
 
 namespace UnitTests.InvalidCommands
 {
-    public class CommandWithSpaces
+    class CommandWithSpaces
     {
         [CommandLineEngine.Attributes.Command("c 1")]
         static void Command1() { }

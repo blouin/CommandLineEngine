@@ -4,7 +4,7 @@ using System.Text;
 
 namespace UnitTests.InvalidCommands
 {
-    public class TwoCommandsSameName
+    class CommandSameName
     {
         [CommandLineEngine.Attributes.Command("c1")]
         static void Command1() { }
