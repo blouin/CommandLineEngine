@@ -33,7 +33,10 @@ namespace CommandLineEngine.Parser
 
             // Run user actions
             var b = ConfigurationValidationAction?.Invoke(this, operationResult);
-            operationResult.Valid &= b ?? true;
+            if (b.HasValue && !b.Value)
+            {
+                operationResult.Messages.Add(Resources.ConfigurationValidationAction);
+            }
 
             // Ensure there is at least one command
             if (!Commands.Any())

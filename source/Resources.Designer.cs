@@ -125,6 +125,15 @@ namespace CommandLineEngine {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Custom validation action returned an error..
+        /// </summary>
+        internal static string ConfigurationValidationAction {
+            get {
+                return ResourceManager.GetString("ConfigurationValidationAction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Creating default instance of &apos;{0}&apos; using the constructor with no arguments..
         /// </summary>
         internal static string CreatingDefaultInstance {

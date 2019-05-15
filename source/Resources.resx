@@ -222,4 +222,7 @@
   <data name="ValidatingCommand" xml:space="preserve">
     <value>Validating command '{0}'.</value>
   </data>
+  <data name="ConfigurationValidationAction" xml:space="preserve">
+    <value>Custom validation action returned an error.</value>
+  </data>
 </root>

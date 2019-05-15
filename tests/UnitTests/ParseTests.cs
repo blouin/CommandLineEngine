@@ -204,15 +204,28 @@ namespace UnitTests
         {
             var c = CommandLineEngine.CommandParser.Parse(typeof(ValidCommands.Single), configurationBuilder: cb =>
             {
-                cb.ConfigurationValidationAction = (_, or) =>
+                cb.ConfigurationValidationAction = (_, __) =>
                 {
-                    or.Messages.Add(new CommandLineEngine.Operation.Types.Warning("test-message"));
                     return true;
                 };
             });
+        }
 
-            //Assert.Single(c.HelpCommandNames);
-            //Assert.Equal("update-help", c.HelpCommandNames[0]);
+        [Fact]
+        public void CustomConfigurationActionInvalid()
+        {
+            Assert.Throws<CommandLineEngine.CommandLineEngineDevelopperException>(
+               () =>
+                   {
+                       var c = CommandLineEngine.CommandParser.Parse(typeof(ValidCommands.Single), configurationBuilder: cb =>
+                       {
+                           cb.ConfigurationValidationAction = (_, __) =>
+                           {
+                               return false;
+                           };
+                       });
+                   }
+                );
         }
 
         #endregion
