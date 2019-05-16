@@ -1,18 +1,18 @@
 ﻿
-namespace CommandLineEngine.Operation.Types
+namespace CommandLineEngine.Operation.Messages
 {
     /// <summary>
-    /// Used to report warning
+    /// Used to report progress
     /// </summary>
-    public class Warning : Item
+    public class Progress : Item
     {
         #region Class Construction
 
         /// <summary>
-        /// Used to report warning
+        /// Used to report progress
         /// </summary>
         /// <param name="message">Progress message</param>
-        public Warning(string message)
+        public Progress(string message)
             : base(message)
         {
         }
@@ -26,7 +26,7 @@ namespace CommandLineEngine.Operation.Types
         /// </summary>
         public override ItemType Type
         {
-            get { return ItemType.Warning; }
+            get { return ItemType.Progress; }
         }
 
         #endregion

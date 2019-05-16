@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using CommandLineEngine.Operation;
-using CommandLineEngine.Operation.Types;
+using CommandLineEngine.Operation.Messages;
 using CommandLineEngine.Parser;
 
 namespace TestConsole

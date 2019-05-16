@@ -1,5 +1,5 @@
 ﻿
-namespace CommandLineEngine.Operation.Types
+namespace CommandLineEngine.Operation.Messages
 {
     /// <summary>
     /// Used to report an error

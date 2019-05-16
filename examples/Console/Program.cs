@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using CommandLineEngine.Operation.Types;
+using CommandLineEngine.Operation.Messages;
 
 namespace TestConsole
 {

@@ -57,10 +57,10 @@ namespace CommandLineEngine
             var operationResult = new Operation.OperationExecutionResult();
 
             // Get command from arguments
-            operationResult.Messages.Add(new Operation.Types.Progress(Resources.GetFromArguments));
+            operationResult.Messages.Add(new Operation.Messages.Progress(Resources.GetFromArguments));
             var command = configuration.GetCommand(args);
             var requestedHelp = configuration.GetArgumentHelp(args);
-            operationResult.Messages.Add(new Operation.Types.Information(String.Format(Resources.CommandInformation, (command == null ? "Unknown" : command.Name), requestedHelp)));
+            operationResult.Messages.Add(new Operation.Messages.Information(String.Format(Resources.CommandInformation, (command == null ? "Unknown" : command.Name), requestedHelp)));
 
             // User requested help
             if (requestedHelp)
@@ -73,7 +73,7 @@ namespace CommandLineEngine
             if (command == null && configuration.Commands.Count() == 1)
             {
                 command = configuration.Commands.First();
-                operationResult.Messages.Add(new Operation.Types.Information(String.Format(Resources.UnknownCommandSingle, command.Name)));
+                operationResult.Messages.Add(new Operation.Messages.Information(String.Format(Resources.UnknownCommandSingle, command.Name)));
                 command.ExecuteInternal(args, operationResult, helpFormatter);
                 return operationResult;
             }
@@ -81,13 +81,13 @@ namespace CommandLineEngine
             // Otherwise, execute from arguments
             if (command != null)
             {
-                operationResult.Messages.Add(new Operation.Types.Information(String.Format(Resources.ExecutingCommandFromArguments, command.Name)));
+                operationResult.Messages.Add(new Operation.Messages.Information(String.Format(Resources.ExecutingCommandFromArguments, command.Name)));
                 command.ExecuteInternal(args, operationResult, helpFormatter);
                 return operationResult;
             }
             else
             {
-                operationResult.Messages.Add(new Operation.Types.Error(Resources.UnknownCommand));
+                operationResult.Messages.Add(new Operation.Messages.Error(Resources.UnknownCommand));
                 CommandParser.PrintHelpInternal(configuration, null, helpFormatter, operationResult.Messages);
                 return operationResult;
             }

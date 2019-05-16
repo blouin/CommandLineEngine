@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using CommandLineEngine.Operation;
-using CommandLineEngine.Operation.Types;
+using CommandLineEngine.Operation.Messages;
 
 namespace CommandLineEngine.Parser
 {

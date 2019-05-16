@@ -73,7 +73,7 @@ namespace CommandLineEngine.Parser
         /// <param name="operationResult">Operation result to write in</param>
         internal InputArguments ValidateInternal(string[] args, OperationResult operationResult)
         {
-            operationResult.Messages.Add(new Operation.Types.Progress(String.Format(Resources.ValidatingCommand, Name)));
+            operationResult.Messages.Add(new Operation.Messages.Progress(String.Format(Resources.ValidatingCommand, Name)));
 
             try
             {
@@ -102,11 +102,11 @@ namespace CommandLineEngine.Parser
                 // For information
                 if (operationResult.Valid)
                 {
-                    operationResult.Messages.Add(new Operation.Types.Information(String.Format(Resources.CommandValid, Name)));
+                    operationResult.Messages.Add(new Operation.Messages.Information(String.Format(Resources.CommandValid, Name)));
                 }
                 else
                 {
-                    operationResult.Messages.Add(new Operation.Types.Warning(String.Format(Resources.CommandInvalid, Name)));
+                    operationResult.Messages.Add(new Operation.Messages.Warning(String.Format(Resources.CommandInvalid, Name)));
                 }
 
                 return parsedArguments;
@@ -134,14 +134,14 @@ namespace CommandLineEngine.Parser
 
             try
             {
-                operationResult.Messages.Add(new Operation.Types.Progress(String.Format(Resources.ExecutingCommand, Name)));
+                operationResult.Messages.Add(new Operation.Messages.Progress(String.Format(Resources.ExecutingCommand, Name)));
 
                 // Create instance of reflected type
                 var target = (object)null;
                 if (!MethodInfo.IsStatic)
                 {
                     // No check, if it crashes it crashes
-                    operationResult.Messages.Add(new Operation.Types.Warning(String.Format(Resources.CreatingDefaultInstance, MethodInfo.DeclaringType)));
+                    operationResult.Messages.Add(new Operation.Messages.Warning(String.Format(Resources.CreatingDefaultInstance, MethodInfo.DeclaringType)));
                     target = Activator.CreateInstance(MethodInfo.DeclaringType, true);
                 }
 

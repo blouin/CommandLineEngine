@@ -32,7 +32,7 @@ namespace CommandLineEngine.Operation
         /// <param name="errorMessage">Error message to add</param>
         public void Add(string errorMessage)
         {
-            Add(new Types.Error(errorMessage));
+            Add(new Messages.Error(errorMessage));
             Owner.Valid = false;
         }
 
@@ -52,7 +52,7 @@ namespace CommandLineEngine.Operation
         /// <param name="errorMessage">Error message to insert</param>
         public void Insert(int index, string errorMessage)
         {
-            Insert(index, new Types.Error(errorMessage));
+            Insert(index, new Messages.Error(errorMessage));
             Owner.Valid = false;
         }
 
