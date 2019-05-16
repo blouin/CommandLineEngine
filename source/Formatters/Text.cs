@@ -144,6 +144,15 @@ namespace CommandLineEngine.Formatters
 
         #endregion
 
+        #region Protected Properties
+
+        /// <summary>
+        /// Gets if we exit the program on error
+        /// </summary>
+        protected internal override sealed bool ExitOnError { get { return false; } }
+
+        #endregion
+
         #region Public Properties
 
         /// <summary>

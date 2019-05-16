@@ -74,5 +74,14 @@ namespace CommandLineEngine.Formatters
         public abstract void PrintHelp(Configuration configuration, Command command, Operation.Items operationMessages);
 
         #endregion
+
+        #region Protected Properties
+
+        /// <summary>
+        /// Gets if we exit the program with error
+        /// </summary>
+        protected internal virtual bool ExitOnError { get { return true; } }
+
+        #endregion
     }
 }

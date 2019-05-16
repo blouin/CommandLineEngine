@@ -31,7 +31,6 @@ namespace TestWinForm
                     // Program information
                     c.Program.Name = "Sample application";
                     c.Program.HelpUrl = "https://github.com/blouin/CommandLineEngine";
-                    c.ExitOnError = false;
                 });
         }
 

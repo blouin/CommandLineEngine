@@ -144,12 +144,13 @@ namespace CommandLineEngine
         internal static void PrintHelpInternal(Parser.Configuration configuration, Parser.Command command, IHelpFormatter helpFormatter, Operation.Items operationMessages, bool error = true)
         {
             var f = (helpFormatter ?? new Formatters.Console());
+            var exit = (f as Formatters.FormatterBase)?.ExitOnError ?? true;
 
             // Print help using the help formatter, or create a default console messenger for this
             f.PrintHelp(configuration, command, operationMessages);
             PrintDebug(operationMessages);
 
-            if (error && configuration.ExitOnError)
+            if (error && exit)
             {
                 Environment.Exit(Int32.MinValue);
             }
