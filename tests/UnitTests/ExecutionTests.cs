@@ -93,7 +93,7 @@ namespace UnitTests
         {
             var a = new string[] { "--qwerty" };
             Assert.Throws<Execute.FormatterTest.ConfigurationException>(() =>
-                CommandLineEngine.CommandExecutor.Execute(a, typeof(Execute.TwoCommand), helpFormatter: new Execute.FormatterTest(), (_) => _.HelpCommandNames = new[] { "--qwerty" })
+                CommandLineEngine.CommandExecutor.Execute(a, typeof(Execute.TwoCommand), new Execute.FormatterTest(), (_) => _.HelpCommandNames = new[] { "--qwerty" })
             );
             // Assert help is printed for configuration
         }
