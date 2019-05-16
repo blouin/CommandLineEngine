@@ -2,16 +2,21 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace UnitTests.InvalidCommands
+namespace UnitTests.Execute
 {
-    class CommandManyDefault
+    class TwoCommandWithDefault
     {
         [CommandLineEngine.Attributes.Command()]
-        [CommandLineEngine.Attributes.CommandDefault()]
-        public void Command1() { }
+        static int Command1()
+        {
+            return 1;
+        }
 
         [CommandLineEngine.Attributes.Command()]
         [CommandLineEngine.Attributes.CommandDefault()]
-        public void Command2() { }
+        static int Command2()
+        {
+            return 2;
+        }
     }
 }

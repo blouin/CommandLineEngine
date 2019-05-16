@@ -109,7 +109,8 @@ namespace CommandLineEngine
                 new List<string>(Environment.GetCommandLineArgs()).CopyTo(1, args, 0, Environment.GetCommandLineArgs().Length - 1);
             }
 
-            return args;
+            // Remove empty args
+            return args.Where(i => !String.IsNullOrEmpty(i)).ToArray();
         }
 
         #endregion

@@ -2,11 +2,14 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace UnitTests.ValidCommands
+namespace UnitTests.Execute
 {
-    class Single
+    class NonStaticCommand
     {
         [CommandLineEngine.Attributes.Command()]
-        static int Command1() { return 999; }
+        int Command1()
+        {
+            return 1;
+        }
     }
 }

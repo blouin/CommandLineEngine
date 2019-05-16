@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace UnitTests.ValidCommands
+namespace UnitTests.Parse.ValidCommands
 {
     class AttributeParameter
     {

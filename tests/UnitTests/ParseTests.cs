@@ -17,14 +17,14 @@ namespace UnitTests
         [Fact]
         public void SingleCommand()
         {
-            var c = CommandLineEngine.CommandParser.Parse(typeof(ValidCommands.Single));
+            var c = CommandLineEngine.CommandParser.Parse(typeof(Parse.ValidCommands.Single));
             Assert.Single(c.Commands);
         }
 
         [Fact]
         public void MultipleCommands()
         {
-            var c = CommandLineEngine.CommandParser.Parse(typeof(ValidCommands.Multiple));
+            var c = CommandLineEngine.CommandParser.Parse(typeof(Parse.ValidCommands.Multiple));
             Assert.Equal(2, c.Commands.Count());
         }
 
@@ -49,7 +49,7 @@ namespace UnitTests
         [Fact]
         public void CommandAttribute()
         {
-            var c = CommandLineEngine.CommandParser.Parse(typeof(ValidCommands.AttributeCommand)).Commands.First();
+            var c = CommandLineEngine.CommandParser.Parse(typeof(Parse.ValidCommands.AttributeCommand)).Commands.First();
             Assert.Equal(c.Name, ParseTests.name);
             Assert.Equal(c.Description, ParseTests.description);
             Assert.Equal(c.HelpUrl, ParseTests.helpUrl);
@@ -62,7 +62,7 @@ namespace UnitTests
         [Fact]
         public void ParameterAttribute()
         {
-            var c = CommandLineEngine.CommandParser.Parse(typeof(ValidCommands.AttributeParameter)).Commands.First();
+            var c = CommandLineEngine.CommandParser.Parse(typeof(Parse.ValidCommands.AttributeParameter)).Commands.First();
             var p = c.Parameters.First();
             Assert.Equal(p.Name, ParseTests.name);
             Assert.Equal(p.ShortName, ParseTests.shortName);
@@ -76,7 +76,7 @@ namespace UnitTests
         [Fact]
         public void ParameterVisibilityAttribute()
         {
-            var c = CommandLineEngine.CommandParser.Parse(typeof(ValidCommands.AttributeParameterHidden)).Commands.First();
+            var c = CommandLineEngine.CommandParser.Parse(typeof(Parse.ValidCommands.AttributeParameterHidden)).Commands.First();
             var p = c.Parameters.ToArray();
 
             Assert.Equal(3, p.Length);
@@ -96,63 +96,63 @@ namespace UnitTests
         public void OneCommandMinimum()
         {
             Assert.Throws<CommandLineEngine.CommandLineEngineDevelopperException>(
-                   () => CommandLineEngine.CommandParser.Parse(typeof(InvalidCommands.CommandNone)));
+                   () => CommandLineEngine.CommandParser.Parse(typeof(Parse.InParse.ValidCommands.CommandNone)));
         }
 
         [Fact]
         public void OneDefaultCommandMaximum()
         {
             Assert.Throws<CommandLineEngine.CommandLineEngineDevelopperException>(
-                   () => CommandLineEngine.CommandParser.Parse(typeof(InvalidCommands.CommandManyDefault)));
+                   () => CommandLineEngine.CommandParser.Parse(typeof(Parse.InParse.ValidCommands.CommandManyDefault)));
         }
 
         [Fact]
         public void CommandWithSpacesFail()
         {
             Assert.Throws<CommandLineEngine.CommandLineEngineDevelopperException>(
-                () => CommandLineEngine.CommandParser.Parse(typeof(InvalidCommands.CommandWithSpaces)));
+                () => CommandLineEngine.CommandParser.Parse(typeof(Parse.InParse.ValidCommands.CommandWithSpaces)));
         }
 
         [Fact]
         public void CommandReservedKeywordFail()
         {
             Assert.Throws<CommandLineEngine.CommandLineEngineDevelopperException>(
-                () => CommandLineEngine.CommandParser.Parse(typeof(InvalidCommands.CommandReservedKeyword)));
+                () => CommandLineEngine.CommandParser.Parse(typeof(Parse.InParse.ValidCommands.CommandReservedKeyword)));
         }
 
         [Fact]
         public void CommandSameNameFail()
         {
             Assert.Throws<CommandLineEngine.CommandLineEngineDevelopperException>(
-                () => CommandLineEngine.CommandParser.Parse(typeof(InvalidCommands.CommandSameName)));
+                () => CommandLineEngine.CommandParser.Parse(typeof(Parse.InParse.ValidCommands.CommandSameName)));
         }
 
         [Fact]
         public void ParameterWithSpacesFail()
         {
             Assert.Throws<CommandLineEngine.CommandLineEngineDevelopperException>(
-                () => CommandLineEngine.CommandParser.Parse(typeof(InvalidCommands.ParameterWithSpaces)));
+                () => CommandLineEngine.CommandParser.Parse(typeof(Parse.InParse.ValidCommands.ParameterWithSpaces)));
         }
 
         [Fact]
         public void ParameterReservedKeywordFail()
         {
             Assert.Throws<CommandLineEngine.CommandLineEngineDevelopperException>(
-                () => CommandLineEngine.CommandParser.Parse(typeof(InvalidCommands.ParameterReservedKeyword)));
+                () => CommandLineEngine.CommandParser.Parse(typeof(Parse.InParse.ValidCommands.ParameterReservedKeyword)));
         }
 
         [Fact]
         public void ParameterSameNameFail()
         {
             Assert.Throws<CommandLineEngine.CommandLineEngineDevelopperException>(
-                () => CommandLineEngine.CommandParser.Parse(typeof(InvalidCommands.ParameterSameName)));
+                () => CommandLineEngine.CommandParser.Parse(typeof(Parse.InParse.ValidCommands.ParameterSameName)));
         }
 
         [Fact]
         public void ParameterNoDefaultHiddenFail()
         {
             Assert.Throws<CommandLineEngine.CommandLineEngineDevelopperException>(
-                () => CommandLineEngine.CommandParser.Parse(typeof(InvalidCommands.ParameterNoDefaultHidden)));
+                () => CommandLineEngine.CommandParser.Parse(typeof(Parse.InParse.ValidCommands.ParameterNoDefaultHidden)));
         }
 
         #endregion
@@ -162,7 +162,7 @@ namespace UnitTests
         [Fact]
         public void UpdateProgramInformation()
         {
-            var c = CommandLineEngine.CommandParser.Parse(typeof(ValidCommands.Single), configurationBuilder: cb =>
+            var c = CommandLineEngine.CommandParser.Parse(typeof(Parse.ValidCommands.Single), configurationBuilder: cb =>
                 {
                     cb.Program.Name = ParseTests.name;
                     cb.Program.HelpUrl = ParseTests.helpUrl;
@@ -177,7 +177,7 @@ namespace UnitTests
         [Fact]
         public void UpdateParameterPrefix()
         {
-            var c = CommandLineEngine.CommandParser.Parse(typeof(ValidCommands.Single), configurationBuilder: cb =>
+            var c = CommandLineEngine.CommandParser.Parse(typeof(Parse.ValidCommands.Single), configurationBuilder: cb =>
             {
                 cb.LongParameterPrefix = "*****";
                 cb.ShortParameterPrefix = "/////";
@@ -190,7 +190,7 @@ namespace UnitTests
         [Fact]
         public void UpdateHelpCommandNames()
         {
-            var c = CommandLineEngine.CommandParser.Parse(typeof(ValidCommands.Single), configurationBuilder: cb =>
+            var c = CommandLineEngine.CommandParser.Parse(typeof(Parse.ValidCommands.Single), configurationBuilder: cb =>
             {
                 cb.HelpCommandNames = new[] { "update-help" };
             });
@@ -202,7 +202,7 @@ namespace UnitTests
         [Fact]
         public void CustomConfigurationActionValid()
         {
-            var c = CommandLineEngine.CommandParser.Parse(typeof(ValidCommands.Single), configurationBuilder: cb =>
+            var c = CommandLineEngine.CommandParser.Parse(typeof(Parse.ValidCommands.Single), configurationBuilder: cb =>
             {
                 cb.ConfigurationValidationAction = (_, __) =>
                 {
@@ -217,7 +217,7 @@ namespace UnitTests
             Assert.Throws<CommandLineEngine.CommandLineEngineDevelopperException>(
                () =>
                    {
-                       var c = CommandLineEngine.CommandParser.Parse(typeof(ValidCommands.Single), configurationBuilder: cb =>
+                       var c = CommandLineEngine.CommandParser.Parse(typeof(Parse.ValidCommands.Single), configurationBuilder: cb =>
                        {
                            cb.ConfigurationValidationAction = (_, __) =>
                            {

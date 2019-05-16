@@ -107,7 +107,8 @@ namespace CommandLineEngine.Parser
             key = possibleArgument?.GetFullLongName() ?? key;
 
             // Special case for boolean, which can have a default value of True
-            if (values == null && possibleArgument?.ParameterInfo.ParameterType == typeof(bool))
+            if ((values == null || values.Length == 0) && 
+                possibleArgument?.ParameterInfo.ParameterType == typeof(bool))
             {
                 values = new[] { bool.TrueString };
             }

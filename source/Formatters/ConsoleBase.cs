@@ -11,6 +11,15 @@ namespace CommandLineEngine.Formatters
     /// </summary>
     public abstract class ConsoleBase : FormatterBase
     {
+        #region Private Attributes
+
+        /// <summary>
+        /// The console width
+        /// </summary>
+        private int consoleWidth;
+
+        #endregion
+
         #region Class Construction
 
         /// <summary>
@@ -18,6 +27,8 @@ namespace CommandLineEngine.Formatters
         /// </summary>
         protected ConsoleBase()
         {
+            try { consoleWidth = System.Console.WindowWidth; }
+            catch { consoleWidth = 80; } // Default value
         }
 
         #endregion
@@ -69,7 +80,6 @@ namespace CommandLineEngine.Formatters
         /// <param name="color">Color text to output</param>
         protected virtual void WriteLine(int lineOffset, string text, System.ConsoleColor? color)
         {
-            int consoleWidth = System.Console.WindowWidth;
             int length = consoleWidth - lineOffset - 1;
 
             List<string> textLines = new List<string>();
