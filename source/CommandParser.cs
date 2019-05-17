@@ -8,7 +8,7 @@ using CommandLineEngine.Attributes;
 namespace CommandLineEngine
 {
     /// <summary>
-    /// Class used to run commands
+    /// Class used to parse commands from specified types
     /// </summary>
     public static class CommandParser
     {
